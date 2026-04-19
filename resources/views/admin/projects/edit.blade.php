@@ -91,14 +91,14 @@
             <div class="col-md-6">
                 <label class="form-label">Featured Image</label>
                 @if($project->featured_image)
-                <div class="mb-2"><img src="{{ Storage::url($project->featured_image) }}" style="max-height:100px;" class="rounded"></div>
+                <div class="mb-2"><img src="{{ upload_url($project->featured_image) }}" style="max-height:100px;" class="rounded"></div>
                 @endif
                 <input type="file" name="featured_image" class="form-control" accept="image/*">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Brochure (PDF)</label>
                 @if($project->brochure)
-                <div class="mb-2"><a href="{{ Storage::url($project->brochure) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-file-pdf me-1"></i>Current Brochure</a></div>
+                <div class="mb-2"><a href="{{ upload_url($project->brochure) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-file-pdf me-1"></i>Current Brochure</a></div>
                 @endif
                 <input type="file" name="brochure" class="form-control" accept="application/pdf">
             </div>
@@ -124,7 +124,7 @@
                 <div class="row g-2">
                     @foreach($project->gallery as $idx => $img)
                     <div class="col-2 position-relative" id="gallery-img-{{ $idx }}">
-                        <img src="{{ Storage::url($img) }}" class="w-100 rounded" style="height:80px;object-fit:cover;">
+                        <img src="{{ upload_url($img) }}" class="w-100 rounded" style="height:80px;object-fit:cover;">
                         <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" style="font-size:10px;padding:2px 6px;" onclick="deleteGalleryImage({{ $project->id }}, {{ $idx }})"><i class="fas fa-times"></i></button>
                     </div>
                     @endforeach

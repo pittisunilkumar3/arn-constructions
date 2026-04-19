@@ -5,10 +5,15 @@
 
     RewriteEngine On
 
-    # Route /storage/ requests to public/storage/
-    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+    # ============================================
+    # STORAGE/UPLOADS ROUTING (AMT-style, no symlink needed)
+    # ============================================
+    # Route /storage/ requests to public/uploads/ (backward compatible)
+    RewriteRule ^storage/(.*)$ uploads/$1 [L]
 
-    # Block access to sensitive files
+    # ============================================
+    # BLOCK ACCESS TO SENSITIVE FILES
+    # ============================================
     RedirectMatch 403 ^/.env
     RedirectMatch 403 ^/artisan
     RedirectMatch 403 ^/composer.*
@@ -18,8 +23,11 @@
     RedirectMatch 403 ^/.editorconfig
     RedirectMatch 403 ^/.gitattributes
     RedirectMatch 403 ^/.gitignore
+    RedirectMatch 403 ^/.env.production
 
-    # Block access to private directories (but NOT public)
+    # ============================================
+    # BLOCK ACCESS TO PRIVATE DIRECTORIES
+    # ============================================
     RedirectMatch 403 ^/app/
     RedirectMatch 403 ^/bootstrap/
     RedirectMatch 403 ^/config/

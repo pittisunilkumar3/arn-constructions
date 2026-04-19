@@ -21,7 +21,7 @@
             <div class="col-md-4"><label class="form-label">Area (sq.ft) *</label><input type="number" name="area_sqft" class="form-control" value="{{ old('area_sqft', isset($floorPlan) ? $floorPlan->area_sqft : '') }}" step="0.01" required></div>
             <div class="col-md-4"><label class="form-label">Price (₹)</label><input type="number" name="price" class="form-control" value="{{ old('price', isset($floorPlan) ? $floorPlan->price : '') }}" step="0.01"></div>
             <div class="col-md-6"><label class="form-label">Floor Plan Image</label>
-                @if(isset($floorPlan) && $floorPlan->image)<div class="mb-2"><img src="{{ Storage::url($floorPlan->image) }}" style="max-height:100px;" class="rounded"></div>@endif
+                @if(isset($floorPlan) && $floorPlan->image)<div class="mb-2"><img src="{{ upload_url($floorPlan->image) }}" style="max-height:100px;" class="rounded"></div>@endif
                 <input type="file" name="image" class="form-control" accept="image/*">
             </div>
             <div class="col-md-3"><label class="form-label">Sort Order</label><input type="number" name="sort_order" class="form-control" value="{{ old('sort_order', isset($floorPlan) ? $floorPlan->sort_order : 0) }}"></div>

@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class SiteSettingController extends Controller
 {
+    protected UploadService $upload;
+
+    public function __construct(UploadService $upload)
+    {
+        $this->upload = $upload;
+    }
+
     public function index()
     {
         $settings = SiteSetting::orderBy('group')->orderBy('id')->get()->groupBy('group');
@@ -20,8 +27,10 @@ class SiteSettingController extends Controller
         foreach ($request->except('_token', '_method') as $key => $value) {
             if ($request->hasFile($key)) {
                 $old = SiteSetting::where('key', $key)->first();
-                if ($old && $old->value) Storage::disk('public')->delete($old->value);
-                $value = $request->file($key)->store('settings', 'public');
+                if ($old && $old->value) {
+                    $this->upload->delete($old->value);
+                }
+                $value = $this->upload->upload($request->file($key), 'settings');
             }
             SiteSetting::updateOrCreate(
                 ['key' => $key],

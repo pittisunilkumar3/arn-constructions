@@ -23,3 +23,30 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Uploaded files (like AMT's uploads/ - root level)
+/uploads/projects/*
+/uploads/gallery/*
+/uploads/sliders/*
+/uploads/testimonials/*
+/uploads/amenities/*
+/uploads/floor-plans/*
+/uploads/brochures/*
+/uploads/settings/*
+!/uploads/*/index.html
+!/uploads/.htaccess
+
+# Also public/uploads (used with artisan serve)
+/public/uploads/projects/*
+/public/uploads/gallery/*
+/public/uploads/sliders/*
+/public/uploads/testimonials/*
+/public/uploads/amenities/*
+/public/uploads/floor-plans/*
+/public/uploads/brochures/*
+/public/uploads/settings/*
+!/public/uploads/*/index.html
+!/public/uploads/.htaccess
+
+# Install lock
+/storage/installed

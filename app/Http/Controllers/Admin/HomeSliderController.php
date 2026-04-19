@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HomeSlider;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class HomeSliderController extends Controller
 {
+    protected UploadService $upload;
+
+    public function __construct(UploadService $upload)
+    {
+        $this->upload = $upload;
+    }
+
     public function index()
     {
         $sliders = HomeSlider::orderBy('sort_order')->paginate(10);
@@ -33,7 +40,7 @@ class HomeSliderController extends Controller
             'sort_order' => 'integer',
         ]);
 
-        $validated['image'] = $request->file('image')->store('sliders', 'public');
+        $validated['image'] = $this->upload->upload($request->file('image'), 'sliders');
         HomeSlider::create($validated);
         return redirect()->route('admin.sliders.index')->with('success', 'Slider created.');
     }
@@ -57,8 +64,8 @@ class HomeSliderController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($slider->image);
-            $validated['image'] = $request->file('image')->store('sliders', 'public');
+            $this->upload->delete($slider->image);
+            $validated['image'] = $this->upload->upload($request->file('image'), 'sliders');
         }
 
         $slider->update($validated);
@@ -67,7 +74,7 @@ class HomeSliderController extends Controller
 
     public function destroy(HomeSlider $slider)
     {
-        Storage::disk('public')->delete($slider->image);
+        $this->upload->delete($slider->image);
         $slider->delete();
         return redirect()->route('admin.sliders.index')->with('success', 'Slider deleted.');
     }

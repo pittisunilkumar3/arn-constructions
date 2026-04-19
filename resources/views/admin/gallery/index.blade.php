@@ -15,7 +15,7 @@
                 @foreach($galleries as $i => $g)
                 <tr>
                     <td>{{ $galleries->firstItem() + $i }}</td>
-                    <td><img src="{{ Storage::url($g->image) }}" style="height:60px;width:80px;object-fit:cover;" class="rounded"></td>
+                    <td><img src="{{ upload_url($g->image) }}" style="height:60px;width:80px;object-fit:cover;" class="rounded"></td>
                     <td>{{ $g->title ?: '-' }}</td>
                     <td class="text-capitalize">{{ $g->category }}</td>
                     <td>{{ $g->project->name ?? 'All' }}</td>

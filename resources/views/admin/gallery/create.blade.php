@@ -23,7 +23,7 @@
                 <select name="project_id" class="form-select"><option value="">All Projects</option>@foreach($projects as $p)<option value="{{ $p->id }}" {{ old('project_id', isset($gallery) ? $gallery->project_id : '') == $p->id ? 'selected' : '' }}>{{ $p->name }}</option>@endforeach</select>
             </div>
             <div class="col-md-6"><label class="form-label">Image {{ isset($gallery) ? '' : '*' }}</label>
-                @if(isset($gallery) && $gallery->image)<div class="mb-2"><img src="{{ Storage::url($gallery->image) }}" style="max-height:100px;" class="rounded"></div>@endif
+                @if(isset($gallery) && $gallery->image)<div class="mb-2"><img src="{{ upload_url($gallery->image) }}" style="max-height:100px;" class="rounded"></div>@endif
                 <input type="file" name="image" class="form-control" accept="image/*" {{ isset($gallery) ? '' : 'required' }}>
             </div>
             <div class="col-md-3"><label class="form-label">Sort Order</label><input type="number" name="sort_order" class="form-control" value="{{ old('sort_order', isset($gallery) ? $gallery->sort_order : 0) }}"></div>

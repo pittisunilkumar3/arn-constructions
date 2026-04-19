@@ -1,0 +1,7 @@
+# Protect install directory
+Options -Indexes
+
+# Block access if installed
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>

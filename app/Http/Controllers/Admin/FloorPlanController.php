@@ -5,11 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\FloorPlan;
 use App\Models\Project;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class FloorPlanController extends Controller
 {
+    protected UploadService $upload;
+
+    public function __construct(UploadService $upload)
+    {
+        $this->upload = $upload;
+    }
+
     public function index()
     {
         $floorPlans = FloorPlan::with('project')->latest()->paginate(15);
@@ -37,7 +44,7 @@ class FloorPlanController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('floor-plans', 'public');
+            $validated['image'] = $this->upload->upload($request->file('image'), 'floor-plans');
         }
 
         FloorPlan::create($validated);
@@ -65,8 +72,10 @@ class FloorPlanController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($floorPlan->image) Storage::disk('public')->delete($floorPlan->image);
-            $validated['image'] = $request->file('image')->store('floor-plans', 'public');
+            if ($floorPlan->image) {
+                $this->upload->delete($floorPlan->image);
+            }
+            $validated['image'] = $this->upload->upload($request->file('image'), 'floor-plans');
         }
 
         $floorPlan->update($validated);
@@ -75,7 +84,9 @@ class FloorPlanController extends Controller
 
     public function destroy(FloorPlan $floorPlan)
     {
-        if ($floorPlan->image) Storage::disk('public')->delete($floorPlan->image);
+        if ($floorPlan->image) {
+            $this->upload->delete($floorPlan->image);
+        }
         $floorPlan->delete();
         return redirect()->route('admin.floor-plans.index')->with('success', 'Floor plan deleted.');
     }

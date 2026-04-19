@@ -10,7 +10,7 @@
 
     <!-- Slide Content Over Canvas -->
     @foreach($sliders as $index => $slider)
-    <div class="hero-slide" data-slide-index="{{ $index }}" style="background-image: url('{{ $slider->image ? Storage::url($slider->image) : asset('images/hero-default.jpg') }}');">
+    <div class="hero-slide" data-slide-index="{{ $index }}" style="background-image: url('{{ $slider->image ? upload_url($slider->image) : asset('images/hero-default.jpg') }}');">
         <div class="container">
             <div class="hero-content animate__animated animate__fadeInUp">
                 <h1>{!! $slider->title !!} <span>{{ $slider->subtitle }}</span></h1>
@@ -66,7 +66,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="project-card position-relative">
                     @if($project->featured_image)
-                    <img src="{{ Storage::url($project->featured_image) }}" class="card-img-top" alt="{{ $project->name }}">
+                    <img src="{{ upload_url($project->featured_image) }}" class="card-img-top" alt="{{ $project->name }}">
                     @else
                     <div class="card-img-top d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1a1a2e, #2d2d5e);">
                         <div class="text-center text-white p-4">
@@ -194,7 +194,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="project-card position-relative">
                     @if($project->featured_image)
-                    <img src="{{ Storage::url($project->featured_image) }}" class="card-img-top" alt="{{ $project->name }}">
+                    <img src="{{ upload_url($project->featured_image) }}" class="card-img-top" alt="{{ $project->name }}">
                     @else
                     <div class="card-img-top d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1a1a2e, #2d2d5e);">
                         <div class="text-center text-white p-4">

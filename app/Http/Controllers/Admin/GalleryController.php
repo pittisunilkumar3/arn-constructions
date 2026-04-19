@@ -5,11 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Gallery;
 use App\Models\Project;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
+    protected UploadService $upload;
+
+    public function __construct(UploadService $upload)
+    {
+        $this->upload = $upload;
+    }
+
     public function index()
     {
         $galleries = Gallery::with('project')->latest()->paginate(20);
@@ -33,7 +40,7 @@ class GalleryController extends Controller
             'sort_order' => 'integer',
         ]);
 
-        $validated['image'] = $request->file('image')->store('gallery', 'public');
+        $validated['image'] = $this->upload->upload($request->file('image'), 'gallery');
         Gallery::create($validated);
         return redirect()->route('admin.gallery.index')->with('success', 'Gallery image added.');
     }
@@ -56,8 +63,8 @@ class GalleryController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($gallery->image);
-            $validated['image'] = $request->file('image')->store('gallery', 'public');
+            $this->upload->delete($gallery->image);
+            $validated['image'] = $this->upload->upload($request->file('image'), 'gallery');
         }
 
         $gallery->update($validated);
@@ -66,7 +73,7 @@ class GalleryController extends Controller
 
     public function destroy(Gallery $gallery)
     {
-        Storage::disk('public')->delete($gallery->image);
+        $this->upload->delete($gallery->image);
         $gallery->delete();
         return redirect()->route('admin.gallery.index')->with('success', 'Gallery image deleted.');
     }

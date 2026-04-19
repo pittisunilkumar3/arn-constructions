@@ -25,14 +25,14 @@
                 <div id="projectGallery" class="mb-4">
                     <div style="border-radius:15px;overflow:hidden;">
                         @if($project->featured_image)
-                        <img src="{{ Storage::url($project->featured_image) }}" class="w-100" style="max-height:500px;object-fit:cover;" alt="{{ $project->name }}">
+                        <img src="{{ upload_url($project->featured_image) }}" class="w-100" style="max-height:500px;object-fit:cover;" alt="{{ $project->name }}">
                         @endif
                     </div>
                     @if(count($project->gallery ?? []) > 0)
                     <div class="row g-2 mt-2">
                         @foreach($project->gallery as $img)
                         <div class="col-3">
-                            <img src="{{ Storage::url($img) }}" class="w-100 rounded" style="height:120px;object-fit:cover;" alt="Gallery">
+                            <img src="{{ upload_url($img) }}" class="w-100 rounded" style="height:120px;object-fit:cover;" alt="Gallery">
                         </div>
                         @endforeach
                     </div>
@@ -90,7 +90,7 @@
                         <div class="col-md-6">
                             <div class="card border-0 shadow-sm">
                                 @if($fp->image)
-                                <img src="{{ Storage::url($fp->image) }}" class="card-img-top" alt="{{ $fp->name }}">
+                                <img src="{{ upload_url($fp->image) }}" class="card-img-top" alt="{{ $fp->name }}">
                                 @endif
                                 <div class="card-body">
                                     <h5 style="color:var(--secondary);">{{ $fp->name }}</h5>
@@ -162,7 +162,7 @@
                 </div>
 
                 @if($project->brochure)
-                <a href="{{ Storage::url($project->brochure) }}" class="btn-primary-custom w-100 text-center d-block mt-3" download><i class="fas fa-download me-2"></i>Download Brochure</a>
+                <a href="{{ upload_url($project->brochure) }}" class="btn-primary-custom w-100 text-center d-block mt-3" download><i class="fas fa-download me-2"></i>Download Brochure</a>
                 @endif
             </div>
         </div>

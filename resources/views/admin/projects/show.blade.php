@@ -36,7 +36,7 @@
         @if($project->featured_image)
         <div class="form-card mb-4">
             <h5 class="mb-3">Featured Image</h5>
-            <img src="{{ Storage::url($project->featured_image) }}" class="w-100 rounded">
+            <img src="{{ upload_url($project->featured_image) }}" class="w-100 rounded">
         </div>
         @endif
         <div class="form-card mb-4">

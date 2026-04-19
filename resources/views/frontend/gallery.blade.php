@@ -45,7 +45,7 @@
             @foreach($galleries as $item)
             <div class="col-lg-3 col-md-4 col-6">
                 <div class="position-relative overflow-hidden rounded" style="height: 250px;">
-                    <img src="{{ Storage::url($item->image) }}" class="w-100 h-100" style="object-fit:cover;" alt="{{ $item->title }}">
+                    <img src="{{ upload_url($item->image) }}" class="w-100 h-100" style="object-fit:cover;" alt="{{ $item->title }}">
                     <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
                         <small class="text-white">{{ $item->title ?? ucfirst($item->category) }}</small>
                     </div>

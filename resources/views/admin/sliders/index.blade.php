@@ -15,7 +15,7 @@
                 @foreach($sliders as $i => $s)
                 <tr>
                     <td>{{ $sliders->firstItem() + $i }}</td>
-                    <td><img src="{{ Storage::url($s->image) }}" style="height:50px;width:100px;object-fit:cover;" class="rounded"></td>
+                    <td><img src="{{ upload_url($s->image) }}" style="height:50px;width:100px;object-fit:cover;" class="rounded"></td>
                     <td>{{ $s->title }}</td>
                     <td>{{ $s->subtitle }}</td>
                     <td>{{ $s->button_text ?: '-' }}</td>

@@ -56,7 +56,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="project-card position-relative">
                     @if($project->featured_image)
-                    <img src="{{ Storage::url($project->featured_image) }}" class="card-img-top" alt="{{ $project->name }}">
+                    <img src="{{ upload_url($project->featured_image) }}" class="card-img-top" alt="{{ $project->name }}">
                     @else
                     <div class="card-img-top d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1a1a2e, #2d2d5e);">
                         <div class="text-center text-white p-4">

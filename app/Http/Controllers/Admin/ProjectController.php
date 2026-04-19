@@ -4,12 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
+    protected UploadService $upload;
+
+    public function __construct(UploadService $upload)
+    {
+        $this->upload = $upload;
+    }
+
     public function index(Request $request)
     {
         $query = Project::query();
@@ -64,21 +71,19 @@ class ProjectController extends Controller
         ]);
 
         if ($request->hasFile('featured_image')) {
-            $validated['featured_image'] = $request->file('featured_image')->store('projects', 'public');
+            $validated['featured_image'] = $this->upload->upload($request->file('featured_image'), 'projects');
         }
 
         if ($request->hasFile('brochure')) {
-            $validated['brochure'] = $request->file('brochure')->store('brochures', 'public');
+            $validated['brochure'] = $this->upload->upload($request->file('brochure'), 'brochures');
         }
 
         $galleryImages = [];
         if ($request->hasFile('gallery')) {
-            foreach ($request->file('gallery') as $image) {
-                $galleryImages[] = $image->store('projects/gallery', 'public');
-            }
+            $galleryImages = $this->upload->uploadMultiple($request->file('gallery'), 'projects/gallery');
         }
         $validated['gallery'] = $galleryImages;
-        // Only auto-generate slug if not provided
+
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']);
         }
@@ -132,31 +137,24 @@ class ProjectController extends Controller
         ]);
 
         if ($request->hasFile('featured_image')) {
-            if ($project->featured_image) {
-                Storage::disk('public')->delete($project->featured_image);
-            }
-            $validated['featured_image'] = $request->file('featured_image')->store('projects', 'public');
+            $this->upload->delete($project->featured_image);
+            $validated['featured_image'] = $this->upload->upload($request->file('featured_image'), 'projects');
         }
 
         if ($request->hasFile('brochure')) {
-            if ($project->brochure) {
-                Storage::disk('public')->delete($project->brochure);
-            }
-            $validated['brochure'] = $request->file('brochure')->store('brochures', 'public');
+            $this->upload->delete($project->brochure);
+            $validated['brochure'] = $this->upload->upload($request->file('brochure'), 'brochures');
         }
 
         $existingGallery = $project->gallery ?? [];
         if ($request->hasFile('gallery')) {
-            foreach ($request->file('gallery') as $image) {
-                $existingGallery[] = $image->store('projects/gallery', 'public');
-            }
+            $newImages = $this->upload->uploadMultiple($request->file('gallery'), 'projects/gallery');
+            $existingGallery = array_merge($existingGallery, $newImages);
         }
         $validated['gallery'] = $existingGallery;
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['is_active'] = $request->boolean('is_active', true);
 
-        // Preserve the slug from form submission (don't auto-generate on name change)
-        // Only auto-generate if slug was left empty
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']);
         }
@@ -168,13 +166,9 @@ class ProjectController extends Controller
 
     public function destroy(Project $project)
     {
-        if ($project->featured_image) {
-            Storage::disk('public')->delete($project->featured_image);
-        }
+        $this->upload->delete($project->featured_image);
         if ($project->gallery) {
-            foreach ($project->gallery as $image) {
-                Storage::disk('public')->delete($image);
-            }
+            $this->upload->deleteMultiple($project->gallery);
         }
         $project->delete();
 
@@ -185,7 +179,7 @@ class ProjectController extends Controller
     {
         $gallery = $project->gallery ?? [];
         if (isset($gallery[$index])) {
-            Storage::disk('public')->delete($gallery[$index]);
+            $this->upload->delete($gallery[$index]);
             unset($gallery[$index]);
             $project->update(['gallery' => array_values($gallery)]);
         }

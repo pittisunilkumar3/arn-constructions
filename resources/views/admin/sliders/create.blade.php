@@ -15,7 +15,7 @@
             <div class="col-md-6"><label class="form-label">Subtitle</label><input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', isset($slider) ? $slider->subtitle : '') }}"></div>
             <div class="col-12"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="3">{{ old('description', isset($slider) ? $slider->description : '') }}</textarea></div>
             <div class="col-md-6"><label class="form-label">Image {{ isset($slider) ? '' : '*' }}</label>
-                @if(isset($slider) && $slider->image)<div class="mb-2"><img src="{{ Storage::url($slider->image) }}" style="max-height:100px;" class="rounded"></div>@endif
+                @if(isset($slider) && $slider->image)<div class="mb-2"><img src="{{ upload_url($slider->image) }}" style="max-height:100px;" class="rounded"></div>@endif
                 <input type="file" name="image" class="form-control" accept="image/*" {{ isset($slider) ? '' : 'required' }}>
             </div>
             <div class="col-md-6">

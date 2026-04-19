@@ -16,7 +16,7 @@
                 @if($setting->type == 'textarea')
                     <textarea name="{{ $setting->key }}" class="form-control" rows="3">{{ old($setting->key, $setting->value) }}</textarea>
                 @elseif($setting->type == 'image' || $setting->type == 'file')
-                    @if($setting->value)<div class="mb-2">@if(str_ends_with($setting->value, '.jpg') || str_ends_with($setting->value, '.png'))<img src="{{ Storage::url($setting->value) }}" style="max-height:80px;" class="rounded">@else<a href="{{ Storage::url($setting->value) }}" target="_blank">View File</a>@endif</div>@endif
+                    @if($setting->value)<div class="mb-2">@if(str_ends_with($setting->value, '.jpg') || str_ends_with($setting->value, '.png'))<img src="{{ upload_url($setting->value) }}" style="max-height:80px;" class="rounded">@else<a href="{{ upload_url($setting->value) }}" target="_blank">View File</a>@endif</div>@endif
                     <input type="file" name="{{ $setting->key }}" class="form-control">
                 @else
                     <input type="text" name="{{ $setting->key }}" class="form-control" value="{{ old($setting->key, $setting->value) }}">
